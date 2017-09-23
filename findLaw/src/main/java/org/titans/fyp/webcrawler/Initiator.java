@@ -21,7 +21,12 @@
 package org.titans.fyp.webcrawler;
 
 import org.apache.log4j.Logger;
+import org.titans.fyp.webcrawler.database.DBConnection;
 import org.titans.fyp.webcrawler.findLaw.UrlCollector;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +35,7 @@ import java.util.List;
 public class Initiator {
 
     final static Logger logger = Logger.getLogger(Initiator.class);
-    public static int caseID = 0;
+    public static int caseID = 589;
 
     public static void main(String[] args) {
 
@@ -40,25 +45,36 @@ public class Initiator {
         try {
             PageCollector.setDomain(url);
 
-            String[] courtNameList = {
-                    "us-supreme-court",
-//                    "de-supreme-court"
-            };
+            String courtName = "us-supreme-court";
+            DBConnection.setDbName("_" + courtName);
+            logger.info("Court: " + courtName);
+            logger.info("Database Name: oblie_" + courtName);
+            DBConnection.setDbUserName("root");
+            logger.info("Database UserName: " + "root");
+            DBConnection.setDbPassword("root");
 
-            for (String courtName : courtNameList) {
-                logger.info("Building the URL list for \"" + courtName + "\"");
-                UrlCollector urlcoll = new UrlCollector(courtName);
-                List<String> summaryPageUrlList = urlcoll.getSummaryPageUrlList();
+            logger.info("Reading the URL list from \"mentionUnique.txt\"");
+            List<String> summaryPageUrlList = new ArrayList();
+            BufferedReader br = new BufferedReader(new FileReader("mentionUnique.txt"));
+            try {
+                String line = br.readLine();
+                while (line != null) {
+                    summaryPageUrlList.add(line);
+                    line = br.readLine();
+                }
                 logger.info(summaryPageUrlList.size());
-                logger.info("URL list building done for \"" + courtName + "\"");
-
-//                logger.info("Crawling has start. Please wait...");
-//                for (String summaryPage:summaryPageUrlList) {
-//                    PageCollector.Crawl(summaryPage);
-//                }
-//                logger.info("crawling completed.");
-
+            } finally {
+                br.close();
             }
+
+
+            logger.info("Crawling has start. Please wait...");
+            for (String summaryPage : summaryPageUrlList) {
+                PageCollector.Crawl(summaryPage);
+            }
+            logger.info("crawling completed.");
+
+
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
