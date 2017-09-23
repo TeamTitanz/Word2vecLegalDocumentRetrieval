@@ -29,6 +29,7 @@ public class CaseInfo {
     private String summaryPageURL;
     private String readPageURL;
     private String summary;
+    private String mentionCasesUrl;
 
 
     public int getCaseId() {
@@ -77,5 +78,13 @@ public class CaseInfo {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public String getMentionCasesUrl() {
+        return mentionCasesUrl;
+    }
+
+    public void setMentionCasesUrl(String mentionCasesUrl) {
+        this.mentionCasesUrl = mentionCasesUrl;
     }
 }

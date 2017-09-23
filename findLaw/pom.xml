@@ -62,7 +62,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.titans.fyp.webcrawler.CorpusBuilderJar</mainClass>
+                            <mainClass>org.titans.fyp.webcrawler.Initiator</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

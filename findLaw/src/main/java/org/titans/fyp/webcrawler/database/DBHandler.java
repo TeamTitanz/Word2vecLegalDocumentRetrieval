@@ -61,13 +61,14 @@ public class DBHandler {
         try {
 
             Connection connection = DBConnection.getConnection();
-            stmt = connection.prepareStatement("INSERT INTO cases VALUES(?,?,?,?,?,?)");
+            stmt = connection.prepareStatement("INSERT INTO cases VALUES(?,?,?,?,?,?,?)");
             stmt.setInt(1, caseInfo.getCaseId());
             stmt.setString(2, caseInfo.getRealName());
             stmt.setString(3, caseInfo.getName());
             stmt.setString(4, caseInfo.getSummaryPageURL());
             stmt.setString(5, caseInfo.getReadPageURL());
-            stmt.setString(6, caseInfo.getSummary());
+            stmt.setString(6, caseInfo.getMentionCasesUrl());
+            stmt.setString(7, caseInfo.getSummary());
             stmt.executeUpdate();
 
         } catch (SQLException e) {

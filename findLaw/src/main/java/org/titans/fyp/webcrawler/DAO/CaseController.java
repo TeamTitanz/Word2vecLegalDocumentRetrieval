@@ -32,7 +32,6 @@ public class CaseController {
 
     //add Case to database
     public static void addCase(CaseInfo caseInfo, ArrayList<Case> caseContent) {
-
         //add case info to database
         DBHandler.setCaseInfo(caseInfo);
 

@@ -23,6 +23,7 @@ package org.titans.fyp.webcrawler;
 
 
 import org.apache.log4j.Logger;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -43,8 +44,9 @@ public class PageCollector {
         domainURL = domain;
     }
 
-    public static void Crawl(String summaryPageURL, String readPageURL) {
+    public static void Crawl(String summaryPageURL) {
 
+        String readPageURL = null;
         try {
             CaseInfo lawCase = new CaseInfo();
             ArrayList<Case> CaseContent = new ArrayList<Case>();
@@ -79,13 +81,16 @@ public class PageCollector {
                 }
             }
 
+            String buttonText = summaryWebPage.getDocument().getElementsByClass("btn_read").toString();
+            Document document = Jsoup.parse(buttonText);
+            readPageURL = document.select("a[href]").get(0).attr("href");
+
             lawCase.setCaseId(caseIndex);
             lawCase.setName(caseName);
             lawCase.setRealName(temName);
             lawCase.setSummaryPageURL(summaryPageURL);
             lawCase.setReadPageURL(readPageURL);
             //------end extracting HTML document from summary page------
-
 
             //------start extracting HTML document from Read page-------
             Anchor readAnchor = new Anchor(domain, readPageURL);
@@ -95,14 +100,25 @@ public class PageCollector {
 
             Elements readDocementContent = readDocument.select
                     (".caselawcontent .searchable-content").first().children();
-
+            StringBuilder sb = new StringBuilder();
             for (Element e : readDocementContent) {
+                for (Element e1 : e.select("a[href]")) {
+                    String mention_url = e1.attr("href");
+                    if (mention_url.contains(".html")) {
+                        sb.append(mention_url);
+                        sb.append(" , ");
+                    }
+                }
+
                 String extractedText = e.text();
                 CaseContent.add(new Case(caseIndex, extractedText));
 //                System.out.println(extractedText);
             }
+            lawCase.setMentionCasesUrl(sb.toString());
+//            System.out.println(sb.toString());
             //------end extracting HTML document from Read page-------
 
+//            logger.info(caseName + ", " + summaryPageURL + ", " + readPageURL);
             CaseController.addCase(lawCase, CaseContent);
             Initiator.caseID++;
 

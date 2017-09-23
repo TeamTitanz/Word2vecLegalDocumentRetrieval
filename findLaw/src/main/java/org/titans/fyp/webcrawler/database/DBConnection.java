@@ -31,19 +31,19 @@ import java.sql.SQLException;
 public class DBConnection {
 
     private static Connection dbConnection;
-    private static String dbCaseName = "";
+    private static String dbName = "";
     private static String dbUserName = "root";
     private static String dbPassword = null;
 
     private DBConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
-        dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/oblie" + dbCaseName
+        dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/oblie" + dbName
                 //database access credentials
                 , dbUserName, dbPassword);
     }
 
-    public static void setDbCaseName(String dbCaseName) {
-        DBConnection.dbCaseName = dbCaseName;
+    public static void setDbName(String dbCaseName) {
+        DBConnection.dbName = dbCaseName;
     }
 
     public static void setDbUserName(String dbUserName) {
