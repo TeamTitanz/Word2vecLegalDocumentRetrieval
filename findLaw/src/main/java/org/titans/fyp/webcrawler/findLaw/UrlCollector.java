@@ -24,7 +24,9 @@ public class UrlCollector {
     private List<String> summaryPageUrlList = new ArrayList();
 
     public UrlCollector(String courtName) {
-        this.courtName = "http://caselaw.findlaw.com/summary/search/?court=" + courtName;
+
+        this.courtName = "http://caselaw.findlaw.com/search?search_type=party&court="
+                + courtName + "&date_start=17600101&date_end=20170923";
         setPagesList();
 
         DBConnection.setDbName("_" + courtName);
@@ -47,9 +49,11 @@ public class UrlCollector {
             Document document = Jsoup.parse(pageSelect);
             Elements options = document.select("strong");
             int pageCount = Integer.parseInt(options.subList(1, options.size()).get(0).text());
+//            System.out.println(pageCount);
             String baseLink = webPage.getAnchor().getAnchorUrl();
             for (int i = 1; i <= pageCount; i++) {
-                pagesList.add(baseLink + "&" + "pgnum=" + i);
+                pagesList.add(baseLink + "&" + "page=" + i);
+                break;//*****************************************
             }
         } catch (Exception e) {
             logger.error(e);
@@ -68,8 +72,11 @@ public class UrlCollector {
             Document document = Jsoup.parse(caseLawTable);
             Elements options = document.select("a[href]");
             for (Element element : options) {
-                summaryPageUrlList.add(element.attr("href"));
+                System.out.println(element.attr("href")+"\t"+ element.attr("title"));
+
+//                summaryPageUrlList.add(element.attr("href"));
             }
+            break;//*****************************************
         }
         return summaryPageUrlList;
     }

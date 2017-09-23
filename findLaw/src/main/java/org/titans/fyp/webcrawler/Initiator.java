@@ -52,11 +52,11 @@ public class Initiator {
                 logger.info(summaryPageUrlList.size());
                 logger.info("URL list building done for \"" + courtName + "\"");
 
-                logger.info("Crawling has start. Please wait...");
-                for (String summaryPage:summaryPageUrlList) {
-                    PageCollector.Crawl(summaryPage);
-                }
-                logger.info("crawling completed.");
+//                logger.info("Crawling has start. Please wait...");
+//                for (String summaryPage:summaryPageUrlList) {
+//                    PageCollector.Crawl(summaryPage);
+//                }
+//                logger.info("crawling completed.");
 
             }
         } catch (Exception e) {
